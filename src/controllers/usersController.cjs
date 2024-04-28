@@ -62,14 +62,6 @@ const putOneUserHandler = async (req, res, next) => {
 const deleteUserHandler = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const users = await getAllUsers();
-        const userToDelete = users.find((user) => user.id === id);
-        if (!userToDelete) {
-            return next({
-                status: statusCode.BAD_REQUEST,
-                message: `Not found user with id ${id}`,
-            });
-        }
         const removedUserList = await removeUser(id);
         res.status(statusCode.NO_CONTENT).json(removedUserList);
     } catch (error) {

@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const usersRouter = express.Router();
 const {
     validateData,
     userSchema,
@@ -13,10 +13,10 @@ const {
     deleteUserHandler,
 } = require('../controllers/usersController.cjs');
 
-router.get('/', getAllUsersHandler);
-router.get('/:id', getOneUserHandler);
-router.post('/', validateData(userSchema), postNewUserHandler);
-router.put('/:id', validateData(userSchema), putOneUserHandler);
-router.delete('/:id', deleteUserHandler);
+usersRouter.get('/', getAllUsersHandler);
+usersRouter.get('/:id', getOneUserHandler);
+usersRouter.post('/', validateData(userSchema), postNewUserHandler);
+usersRouter.put('/:id', validateData(userSchema), putOneUserHandler);
+usersRouter.delete('/:id', deleteUserHandler);
 
-module.exports = router;
+module.exports = usersRouter;
