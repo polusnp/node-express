@@ -16,7 +16,7 @@ const {
 router.get('/', getAllUsersHandler);
 router.get('/:id', getOneUserHandler);
 router.post('/', validateData(userSchema), postNewUserHandler);
-router.put('/:userId', validateData(userSchema), putOneUserHandler);
-router.delete('/:userId', deleteUserHandler);
+router.put('/:id', validateData(userSchema), putOneUserHandler);
+router.delete('/:id', deleteUserHandler);
 
 module.exports = router;

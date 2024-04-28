@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { statusCode } = require('../helpers/constants.cjs');
 
 const userSchema = Joi.object({
     name: Joi.string()
@@ -28,7 +29,9 @@ const validateData = (schema) => {
     return (req, res, next) => {
         const { error } = schema.validate(req.body);
         if (error) {
-            return res.status(400).json({ error: error.details[0].message });
+            return res
+                .status(statusCode.BAD_REQUEST)
+                .json({ error: error.details[0].message });
         }
         next();
     };
