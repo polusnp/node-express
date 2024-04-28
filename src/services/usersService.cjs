@@ -1,14 +1,9 @@
-const fs = require('fs/promises');
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
-
-const usersPath = path.join(__dirname, '../model/users.json');
+const { User } = require('../model/userModel.cjs');
 
 const getAllUsers = async () => {
     try {
-        const users = await fs.readFile(usersPath, 'utf-8');
-        const parsedUsers = JSON.parse(users);
-        return parsedUsers;
+        const users = await User.find();
+        return users;
     } catch (error) {
         throw error;
     }
@@ -16,9 +11,8 @@ const getAllUsers = async () => {
 
 const getUserById = async (id) => {
     try {
-        const users = await getAllUsers();
-        const userById = users.find((user) => user.id === id);
-        return userById;
+        const user = await User.findById(id);
+        return user;
     } catch (error) {
         throw error;
     }
@@ -26,10 +20,7 @@ const getUserById = async (id) => {
 
 const addNewUser = async (userData) => {
     try {
-        const users = await getAllUsers();
-        const newUser = { id: uuidv4(), ...userData };
-        const newUsersList = [...users, newUser];
-        await fs.writeFile(usersPath, JSON.stringify(newUsersList), 'utf-8');
+        const newUser = await User.create(userData);
         return newUser;
     } catch (error) {
         throw error;
@@ -38,13 +29,11 @@ const addNewUser = async (userData) => {
 
 const updateUser = async (id, body) => {
     try {
-        const initialUser = await getUserById(id);
-        const users = await getAllUsers();
-        const updatedUser = { ...initialUser, ...body };
-        const updatedUserList = users.map((user) =>
-            user.id === id ? updatedUser : user
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { $set: body },
+            { new: true }
         );
-        await fs.writeFile(usersPath, JSON.stringify(updatedUserList), 'utf-8');
         return updatedUser;
     } catch (error) {
         throw error;
@@ -53,9 +42,7 @@ const updateUser = async (id, body) => {
 
 const removeUser = async (id) => {
     try {
-        const users = await getAllUsers();
-        const newUsersList = users.filter((user) => user.id !== id);
-        await fs.writeFile(usersPath, JSON.stringify(newUsersList), 'utf-8');
+        const newUsersList = await User.findByIdAndDelete(id);
         return newUsersList;
     } catch (error) {
         throw error;
